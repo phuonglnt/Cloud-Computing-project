@@ -8,7 +8,43 @@ services:
     environment:
       - OPENAI_API_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai
       - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - HTTPS_PROXY=http://cache.univ-pau.fr:3128
+      - https_proxy=http://cache.univ-pau.fr:3128
+      - RAG_EMBEDDING_ENGINE=openai
+      - RAG_EMBEDDING_MODEL=models/gemini-embedding-001
+      - RAG_OPENAI_API_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai
+      - RAG_OPENAI_API_KEY=${OPENAI_API_KEY}
+      - DATABASE_URL=postgresql://cloudapp:${POSTGRES_PASSWORD}@postgres:5432/cloudapp
+    depends_on:
+      - postgres
     restart: always
 
+  postgres:
+    image: postgres:16
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=cloudapp
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=cloudapp
+    restart: always
+
+  quiz-api:
+    build: ./quiz-api
+    ports:
+      - "8000:8000"
+    environment:
+      - ASSISTANT_URL=http://open-webui:8080
+      - ASSISTANT_API_KEY=${ASSISTANT_API_KEY}
+      - QUIZ_MODEL=models/gemini-3.5-flash
+      - NO_PROXY=open-webui,postgres,localhost,127.0.0.1
+      - no_proxy=open-webui,postgres,localhost,127.0.0.1
+    depends_on:
+      - open-webui
+    restart: always
+   
 volumes:
   open-webui:
+  postgres-data:
+
+
