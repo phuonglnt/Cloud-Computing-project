@@ -88,16 +88,13 @@ volumes:
   open-webui:
 ```
 
-Start the stack:
-
-```bash
-docker compose up -d
-docker compose ps
-```
 
 ## Operations
 
 ```bash
+docker compose up -d
+docker compose ps
+
 docker compose down                     # stop, keep the data
 docker compose up -d --force-recreate   # apply changes made to the YAML file
 ```
@@ -162,6 +159,20 @@ The knowledge base id is visible in the URL of the knowledge base in Open WebUI,
 
 ```bash
 curl -s --noproxy '*' http://127.0.0.1:3000/api/v1/knowledge/ -H "Authorization: Bearer YOUR_KEY"
+```
+
+##Available models (Last updated on 8 October 2026)
+
+```bash
+models/gemini-3.5-flash
+models/gemini-3.6-flash
+models/gemini-3.8-flash
+models/gemini-3-flash-preview
+models/gemini-3.1-flash-lite
+models/gemini-3.1-flash-lite-preview
+models/gemini-3.5-flash-lite
+models/gemini-flash-latest
+models/gemini-flash-lite-latest
 ```
 
 ## Known limitations
